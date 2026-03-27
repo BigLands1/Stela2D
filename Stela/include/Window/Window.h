@@ -19,4 +19,11 @@ namespace Stela {
             SDL_Window *window;
             SDL_Renderer *renderer;
     };
+
+    class STELA_API Object {
+        public:
+            struct Rect {float x; float y; float w; float h; Uint8 r; Uint8 g; Uint8 b; Uint8 a;};
+            using Render = SDL_Renderer;
+            void Draw(Rect object, SDL_Renderer *renderer);
+        };
 }

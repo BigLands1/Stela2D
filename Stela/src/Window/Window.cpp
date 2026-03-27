@@ -63,4 +63,10 @@ namespace Stela {
 
         SDL_Quit();
     }
+
+    void Object::Draw(Rect object, SDL_Renderer *renderer) {
+        SDL_SetRenderDrawColor(renderer, object.r, object.b, object.g, object.a);
+        SDL_FRect newObject = {object.x, object.y, object.w, object.h};
+        SDL_RenderFillRect(renderer, &newObject);
+    }
 }
