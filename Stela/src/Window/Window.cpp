@@ -4,6 +4,8 @@ namespace Stela {
     SDL_Window* Window::Create(const char * title, int width, int height) {
         SDL_Init(SDL_INIT_VIDEO);
 
+        SDL_SetHint(SDL_HINT_RENDER_DRIVER, "direct3d12,metal,vulkan,direct3d11,opengl");
+
         SDL_CreateWindowAndRenderer(title, width, height, SDL_WINDOW_RESIZABLE, &window, &renderer);
 
         if (window == NULL) {
