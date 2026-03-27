@@ -1,0 +1,12 @@
+project(Runtime)
+
+file(GLOB_RECURSE SOURCES
+    "src/*.cpp"
+    "src/*.h"
+    "include/*.h")
+
+add_executable(Runtime ${SOURCES})
+
+target_include_directories(Runtime PUBLIC "../ThirdParty/SDL/include" "../Stela/include")
+
+target_link_libraries(Runtime Stela SDL3::SDL3)

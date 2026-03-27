@@ -1,0 +1,14 @@
+project(Stela)
+
+file(GLOB_RECURSE SOURCES
+    "src/*.cpp"
+    "src/*.h"
+    "include/*.h")
+
+add_library(Stela SHARED ${SOURCES})
+
+target_include_directories(Stela PUBLIC "../ThirdParty/SDL/include" "include")
+
+target_link_libraries(Stela SDL3::SDL3)
+
+target_compile_definitions(Stela PRIVATE STELA_BUILDING)

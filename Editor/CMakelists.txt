@@ -1,0 +1,12 @@
+project(Editor)
+
+file(GLOB_RECURSE SOURCES
+    "src/*.cpp"
+    "src/*.h"
+    "include/*.h")
+
+add_executable(Editor ${SOURCES})
+
+target_include_directories(Editor PUBLIC "../ThirdParty/SDL/include" "../Stela/include")
+
+target_link_libraries(Editor Stela SDL3::SDL3)
