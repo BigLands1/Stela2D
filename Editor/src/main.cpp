@@ -8,12 +8,15 @@ int main() {
 
     auto mainWindow = window.Create("Stela", 800, 600);
 
-    Object::Rect rect = {0, 0, 100, 100, 255, 0, 0, 0};
+    auto renderer = window.GetRenderer();
+
+    Object::Rect rect = {nullptr, 0, 0, 100, 100, 255, 0, 0, 0};
 
     // FULLSCREEN BACKGROUND
-    Object::Rect background = {0, 0, (float)window.width, (float)window.height, 100, 149, 237, 255};
+    SDL_Texture* backgroundTexture = object.LoadTexture("rectTexture.png");
+    Object::Rect background = {backgroundTexture, 0, 0, (float)window.width, (float)window.height, 100, 149, 237, 255};
 
-    window.WindowLoop(mainWindow, [&](Object::Render* renderer) {
+    window.WindowLoop(mainWindow, [&]() {
         // Center rectangle
         rect.x = (window.width - rect.w) / 2.0f;
         rect.y = (window.height - rect.h) / 2.0f;
@@ -23,10 +26,10 @@ int main() {
         background.h = (window.height);
 
         // Draw background
-        object.Draw(background, renderer);
+        object.Draw(background);
 
         // Draw rect
-        object.Draw(rect, renderer);
+        object.Draw(rect);
     });
 
     window.Cleanup(mainWindow);

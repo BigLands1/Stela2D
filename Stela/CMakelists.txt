@@ -7,8 +7,8 @@ file(GLOB_RECURSE SOURCES
 
 add_library(Stela SHARED ${SOURCES})
 
-target_include_directories(Stela PUBLIC "../ThirdParty/SDL/include" "include")
+target_include_directories(Stela PUBLIC "../ThirdParty/SDL/include" "../ThirdParty/SDL_image/include" "include")
 
-target_link_libraries(Stela SDL3::SDL3)
+target_link_libraries(Stela SDL3_image::SDL3_image SDL3::SDL3)
 
 target_compile_definitions(Stela PRIVATE STELA_BUILDING)

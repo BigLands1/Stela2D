@@ -1,30 +1,36 @@
 #include "Window/Window.h"
 
+using namespace Stela;
+
 int main() {
-    Stela::Window window;
+    Window window;
+    Object object;
 
     auto mainWindow = window.Create("Stela", 800, 600);
 
-    SDL_FRect rect = {0, 0, 100, 100};
+    auto renderer = window.GetRenderer();
 
-    window.WindowLoop(mainWindow, [&](SDL_Renderer* renderer) {
-        int w, h;
-        SDL_GetWindowSize(mainWindow, &w, &h);
+    SDL_Texture* rectTexture = object.LoadTexture("rectTexture.png");
+    Object::Rect rect = {rectTexture, 0, 0, 100, 100, 255, 0, 0, 0};
 
-        // FULLSCREEN BACKGROUND
-        SDL_FRect background = {0, 0, (float)w, (float)h};
+    // FULLSCREEN BACKGROUND
+    SDL_Texture* backgroundTexture = object.LoadTexture("rectTexture.png");
+    Object::Rect background = {backgroundTexture, 0, 0, (float)window.width, (float)window.height, 100, 149, 237, 255};
 
+    window.WindowLoop(mainWindow, [&]() {
         // Center rectangle
-        rect.x = (w - rect.w) / 2.0f;
-        rect.y = (h - rect.h) / 2.0f;
+        rect.x = (window.width - rect.w) / 2.0f;
+        rect.y = (window.height - rect.h) / 2.0f;
+
+        // Update background
+        background.w = (window.width);
+        background.h = (window.height);
 
         // Draw background
-        SDL_SetRenderDrawColor(renderer, 100, 149, 237, 255);
-        SDL_RenderFillRect(renderer, &background);
+        object.Draw(background);
 
         // Draw rect
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
-        SDL_RenderFillRect(renderer, &rect);
+        object.Draw(rect);
     });
 
     window.Cleanup(mainWindow);
