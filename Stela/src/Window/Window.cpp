@@ -26,12 +26,18 @@ namespace Stela {
         return renderer;
     }
 
-    void Window::WindowLoop(SDL_Window* window, std::function<void()> renderFunc) {
+    void Window::WindowLoop(SDL_Window* window, std::function<void()> renderFunc, std::function<void(SDL_Event&)> eventFunc) {
         SDL_Event e;
         bool bQuit = false;
 
         while (!bQuit) {
             while (SDL_PollEvent(&e) != 0) {
+
+                if (eventFunc) {
+                    eventFunc(e);
+                }
+
+
                 if (e.type == SDL_EVENT_QUIT) {
                     bQuit = true;
                 }

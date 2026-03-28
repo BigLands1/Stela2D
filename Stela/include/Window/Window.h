@@ -11,12 +11,14 @@ namespace Stela {
     class STELA_API Window {
         public:
             SDL_Window* Create(const char * name, int width, int height);
-            void WindowLoop(SDL_Window* window, std::function<void()> renderFunc);
+            void WindowLoop(SDL_Window* window, std::function<void()> renderFunc, std::function<void(SDL_Event&)> eventFunc);
             void Cleanup(SDL_Window* window);
             SDL_Renderer* GetRenderer() const;
 
             int width;
             int height;
+
+            SDL_Texture* framebuffer;
 
         private:
             SDL_Window *window;

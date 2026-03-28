@@ -11,13 +11,16 @@ int main() {
     auto renderer = window.GetRenderer();
 
     SDL_Texture* rectTexture = object.LoadTexture("rectTexture.png");
-    Object::Rect rect = {rectTexture, 0, 0, 100, 100, 255, 0, 0, 0};
+    Object::Rect rect = {rectTexture, 0, 0, 100, 100, 255, 0, 0, 255};
 
     // FULLSCREEN BACKGROUND
-    SDL_Texture* backgroundTexture = object.LoadTexture("rectTexture.png");
-    Object::Rect background = {backgroundTexture, 0, 0, (float)window.width, (float)window.height, 100, 149, 237, 255};
+    Object::Rect background = {nullptr, 0, 0, (float)window.width, (float)window.height, 100, 149, 237, 255};
 
-    window.WindowLoop(mainWindow, [&]() {
+    window.WindowLoop(
+        mainWindow, 
+
+        // Render
+        [&]() {
         // Center rectangle
         rect.x = (window.width - rect.w) / 2.0f;
         rect.y = (window.height - rect.h) / 2.0f;
@@ -31,6 +34,11 @@ int main() {
 
         // Draw rect
         object.Draw(rect);
+    },
+
+    // Event
+    [&](SDL_Event& e) {
+        
     });
 
     window.Cleanup(mainWindow);

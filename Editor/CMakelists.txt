@@ -7,6 +7,6 @@ file(GLOB_RECURSE SOURCES
 
 add_executable(Editor ${SOURCES})
 
-target_include_directories(Editor PUBLIC "../ThirdParty/SDL/include" "../Stela/include")
+target_include_directories(Editor PUBLIC "../ThirdParty/SDL/include" "../ThirdParty/imgui" "../Stela/include")
 
-target_link_libraries(Editor Stela SDL3::SDL3)
+target_link_libraries(Editor Stela SDL3::SDL3 imgui)
