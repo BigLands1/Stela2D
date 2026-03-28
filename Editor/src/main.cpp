@@ -5,6 +5,117 @@
 
 using namespace Stela;
 
+void SetupImGuiStyle()
+{
+    ImGuiStyle& style = ImGui::GetStyle();
+
+    // === Layout & Rounding (modern & clean) ===
+    style.Alpha = 1.0f;
+    style.DisabledAlpha = 0.60f;
+    style.WindowPadding = ImVec2(0.0f, 0.0f);
+    style.WindowRounding = 10.0f;
+    style.WindowBorderSize = 0.0f;
+    style.WindowMinSize = ImVec2(32.0f, 32.0f);
+    style.WindowTitleAlign = ImVec2(0.5f, 0.5f);
+    style.ChildRounding = 8.0f;
+    style.ChildBorderSize = 1.0f;
+    style.PopupRounding = 10.0f;
+    style.PopupBorderSize = 1.0f;
+    style.FramePadding = ImVec2(6.0f, 6.0f);
+    style.FrameRounding = 6.0f;
+    style.FrameBorderSize = 0.0f;
+    style.ItemSpacing = ImVec2(8.0f, 6.0f);
+    style.ItemInnerSpacing = ImVec2(6.0f, 4.0f);
+    style.CellPadding = ImVec2(6.0f, 4.0f);
+    style.IndentSpacing = 22.0f;
+    style.ColumnsMinSpacing = 6.0f;
+    style.ScrollbarSize = 14.0f;
+    style.ScrollbarRounding = 9.0f;
+    style.GrabMinSize = 12.0f;
+    style.GrabRounding = 6.0f;
+    style.TabRounding = 8.0f;
+    style.TabBorderSize = 0.0f;
+    style.ColorButtonPosition = ImGuiDir_Right;
+    style.ButtonTextAlign = ImVec2(0.5f, 0.5f);
+    style.SelectableTextAlign = ImVec2(0.0f, 0.0f);
+
+    // === Colors - Deep dark + Neon Green accent ===
+    style.Colors[ImGuiCol_Text]                  = ImVec4(0.95f, 0.95f, 0.96f, 1.00f);
+    style.Colors[ImGuiCol_TextDisabled]          = ImVec4(0.50f, 0.50f, 0.50f, 1.00f);
+
+    style.Colors[ImGuiCol_WindowBg]              = ImVec4(0.10f, 0.10f, 0.11f, 1.00f);   // Very deep background
+    style.Colors[ImGuiCol_ChildBg]               = ImVec4(0.12f, 0.12f, 0.13f, 1.00f);
+    style.Colors[ImGuiCol_PopupBg]               = ImVec4(0.12f, 0.12f, 0.13f, 0.98f);
+
+    style.Colors[ImGuiCol_Border]                = ImVec4(0.25f, 0.25f, 0.28f, 0.60f);
+    style.Colors[ImGuiCol_BorderShadow]          = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
+
+    style.Colors[ImGuiCol_FrameBg]               = ImVec4(0.18f, 0.18f, 0.20f, 1.00f);
+    style.Colors[ImGuiCol_FrameBgHovered]        = ImVec4(0.22f, 0.65f, 0.30f, 0.60f);   // Soft green hover
+    style.Colors[ImGuiCol_FrameBgActive]         = ImVec4(0.25f, 0.80f, 0.35f, 0.85f);
+
+    style.Colors[ImGuiCol_TitleBg]               = ImVec4(0.08f, 0.08f, 0.09f, 1.00f);
+    style.Colors[ImGuiCol_TitleBgActive]         = ImVec4(0.15f, 0.45f, 0.25f, 1.00f);   // Green-tinted active title
+    style.Colors[ImGuiCol_TitleBgCollapsed]      = ImVec4(0.08f, 0.08f, 0.09f, 0.70f);
+
+    style.Colors[ImGuiCol_MenuBarBg]             = ImVec4(0.12f, 0.12f, 0.13f, 1.00f);
+
+    style.Colors[ImGuiCol_ScrollbarBg]           = ImVec4(0.10f, 0.10f, 0.11f, 0.60f);
+    style.Colors[ImGuiCol_ScrollbarGrab]         = ImVec4(0.35f, 0.35f, 0.38f, 1.00f);
+    style.Colors[ImGuiCol_ScrollbarGrabHovered]  = ImVec4(0.45f, 0.45f, 0.48f, 1.00f);
+    style.Colors[ImGuiCol_ScrollbarGrabActive]   = ImVec4(0.55f, 0.55f, 0.58f, 1.00f);
+
+    // Primary accent: Vibrant Neon Green
+    const ImVec4 accent          = ImVec4(0.15f, 0.95f, 0.45f, 1.00f);   // Main green
+    const ImVec4 accentHover     = ImVec4(0.25f, 1.00f, 0.55f, 1.00f);
+    const ImVec4 accentActive    = ImVec4(0.10f, 0.85f, 0.35f, 1.00f);
+
+    style.Colors[ImGuiCol_CheckMark]             = accent;
+    style.Colors[ImGuiCol_SliderGrab]            = accent;
+    style.Colors[ImGuiCol_SliderGrabActive]      = accentHover;
+
+    style.Colors[ImGuiCol_Button]                = ImVec4(0.18f, 0.55f, 0.30f, 0.60f);
+    style.Colors[ImGuiCol_ButtonHovered]         = accentHover;
+    style.Colors[ImGuiCol_ButtonActive]          = accentActive;
+
+    style.Colors[ImGuiCol_Header]                = ImVec4(0.18f, 0.55f, 0.30f, 0.55f);
+    style.Colors[ImGuiCol_HeaderHovered]         = accentHover;
+    style.Colors[ImGuiCol_HeaderActive]          = accentActive;
+
+    style.Colors[ImGuiCol_Separator]             = ImVec4(0.25f, 0.25f, 0.28f, 0.70f);
+    style.Colors[ImGuiCol_SeparatorHovered]      = ImVec4(0.30f, 0.75f, 0.40f, 0.80f);
+    style.Colors[ImGuiCol_SeparatorActive]       = accent;
+
+    style.Colors[ImGuiCol_ResizeGrip]            = ImVec4(0.20f, 0.60f, 0.35f, 0.30f);
+    style.Colors[ImGuiCol_ResizeGripHovered]     = accentHover;
+    style.Colors[ImGuiCol_ResizeGripActive]      = accentActive;
+
+    style.Colors[ImGuiCol_Tab]                   = ImVec4(0.15f, 0.18f, 0.20f, 1.00f);
+    style.Colors[ImGuiCol_TabHovered]            = accentHover;
+    style.Colors[ImGuiCol_TabActive]             = ImVec4(0.20f, 0.65f, 0.35f, 1.00f);
+    style.Colors[ImGuiCol_TabUnfocused]          = ImVec4(0.12f, 0.12f, 0.13f, 1.00f);
+    style.Colors[ImGuiCol_TabUnfocusedActive]    = ImVec4(0.18f, 0.45f, 0.28f, 1.00f);
+
+    style.Colors[ImGuiCol_PlotLines]             = ImVec4(0.60f, 0.80f, 0.40f, 1.00f);
+    style.Colors[ImGuiCol_PlotLinesHovered]      = accentHover;
+    style.Colors[ImGuiCol_PlotHistogram]         = ImVec4(0.90f, 0.70f, 0.20f, 1.00f);
+    style.Colors[ImGuiCol_PlotHistogramHovered]  = ImVec4(1.00f, 0.80f, 0.30f, 1.00f);
+
+    style.Colors[ImGuiCol_TableHeaderBg]         = ImVec4(0.15f, 0.15f, 0.17f, 1.00f);
+    style.Colors[ImGuiCol_TableBorderStrong]     = ImVec4(0.28f, 0.28f, 0.32f, 1.00f);
+    style.Colors[ImGuiCol_TableBorderLight]      = ImVec4(0.22f, 0.22f, 0.25f, 1.00f);
+    style.Colors[ImGuiCol_TableRowBg]            = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
+    style.Colors[ImGuiCol_TableRowBgAlt]         = ImVec4(1.00f, 1.00f, 1.00f, 0.04f);
+
+    style.Colors[ImGuiCol_TextSelectedBg]        = ImVec4(0.25f, 0.85f, 0.45f, 0.40f);
+    style.Colors[ImGuiCol_DragDropTarget]        = ImVec4(0.95f, 0.90f, 0.20f, 0.90f);
+
+    style.Colors[ImGuiCol_NavHighlight]          = accent;
+    style.Colors[ImGuiCol_NavWindowingHighlight] = ImVec4(1.00f, 1.00f, 1.00f, 0.70f);
+    style.Colors[ImGuiCol_NavWindowingDimBg]     = ImVec4(0.80f, 0.80f, 0.80f, 0.20f);
+    style.Colors[ImGuiCol_ModalWindowDimBg]      = ImVec4(0.00f, 0.00f, 0.00f, 0.65f);
+}
+
 int main() {
     Window window;
     Object object;
@@ -32,6 +143,8 @@ int main() {
     // Setup backend
     ImGui_ImplSDL3_InitForSDLRenderer(mainWindow, renderer);
     ImGui_ImplSDLRenderer3_Init(renderer);
+
+    SetupImGuiStyle();
 
     int viewportWidth;
     int viewportHeight;
