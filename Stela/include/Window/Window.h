@@ -6,6 +6,7 @@
 #include "SDL3/SDL.h"
 #include <SDL3_image/SDL_image.h>
 #include <functional>
+#include <string>
 
 namespace Stela {
     class STELA_API Window {
@@ -28,7 +29,8 @@ namespace Stela {
     class STELA_API Object {
         public:
             SDL_Texture* LoadTexture(const char* path);
-            struct Rect {SDL_Texture* texture; float x; float y; float w; float h; Uint8 r; Uint8 g; Uint8 b; Uint8 a;};
+            struct TextureComponent {std::string path; SDL_Texture* texture = nullptr; bool active = true; };
+            struct Rect {SDL_Texture* texture; float x; float y; float w; float h; Uint8 r; Uint8 g; Uint8 b; Uint8 a; std::string name; TextureComponent* textureComp = nullptr;};
             using Render = SDL_Renderer;
             void Draw(Rect object);
         };

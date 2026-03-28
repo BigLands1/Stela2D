@@ -149,11 +149,8 @@ int main() {
     int viewportWidth;
     int viewportHeight;
 
-    SDL_Texture* rectTexture = object.LoadTexture("rectTexture.png");
-    Object::Rect rect = {nullptr, 0, 0, 100, 100, 255, 0, 0, 255};
-
-    // FULLSCREEN BACKGROUND
-    Object::Rect background = {nullptr, 0, 0, (float)window.width, (float)window.height, 100, 149, 237, 255};
+    std::vector<Object::Rect> objects;
+    int selectedIndex = -1;
 
     window.WindowLoop(
         mainWindow, 
@@ -198,14 +195,128 @@ int main() {
 
         ImGui::End();
 
+        ImGui::Begin("Objects");
 
-        // Center rectangle
-        rect.x = (viewportWidth - rect.w) / 2.0f;
-        rect.y = (viewportHeight - rect.h) / 2.0f;
+        for (int i = 0; i < objects.size(); i++) {
+            ImGui::PushID(i);
 
-        // Update background
-        background.w = (viewportWidth);
-        background.h = (viewportHeight);
+            bool isSelected = (selectedIndex == i);
+
+            if (ImGui::Selectable(objects[i].name.c_str(), isSelected)) {
+                selectedIndex = i;
+            }
+
+            ImGui::PopID();
+        }
+
+        if (ImGui::Button("Create Object")) {
+            objects.push_back({
+                nullptr,
+                100, 100, 50, 50,
+                255, 0, 0, 255,
+                "New Object"
+            });
+        }
+
+        ImGui::End();
+
+        ImGui::Begin("Inspector");
+
+        static char buffer[128] = "";
+
+        if (selectedIndex != -1) {
+            auto& obj = objects[selectedIndex];
+
+            // Sync buffer only when selection changes
+            static int lastSelected = -1;
+            if (lastSelected != selectedIndex) {
+                strncpy(buffer, obj.name.c_str(), sizeof(buffer));
+                lastSelected = selectedIndex;
+            }
+
+            if (ImGui::InputText("Name", buffer, sizeof(buffer))) {
+                obj.name = buffer;
+            }
+
+            ImGui::Separator();
+
+            // Transform
+            ImGui::DragFloat2("Position", &obj.x, 1.0f);
+            ImGui::DragFloat2("Size", &obj.w, 1.0f);
+
+            // Color
+            float color[4] = {
+                obj.r / 255.0f,
+                obj.g / 255.0f,
+                obj.b / 255.0f,
+                obj.a / 255.0f
+            };
+
+            if (ImGui::ColorEdit4("Color", color)) {
+                obj.r = (int)(color[0] * 255);
+                obj.g = (int)(color[1] * 255);
+                obj.b = (int)(color[2] * 255);
+                obj.a = (int)(color[3] * 255);
+            }
+
+            ImGui::Separator();
+
+            // Delete
+            if (ImGui::Button("Delete Object")) {
+                objects.erase(objects.begin() + selectedIndex);
+                selectedIndex = -1;
+            }
+
+            if (ImGui::Button("Add Component")) {
+                ImGui::OpenPopup("AddComponentPopup");
+            }
+
+            if (ImGui::BeginPopup("AddComponentPopup")) {
+
+                if (ImGui::MenuItem("Texture")) {
+                    if (!obj.textureComp) {
+                        obj.textureComp = new Object::TextureComponent();
+                    }
+                }
+
+                ImGui::EndPopup();
+            }
+
+            if (obj.textureComp) {
+                ImGui::Separator();
+                ImGui::Text("Texture Component");
+
+                auto& tex = obj.textureComp;
+
+                ImGui::Checkbox("Active", &tex->active);
+
+                static char pathBuffer[256] = "";
+
+                static int lastSelectedTex = -1;
+                if (lastSelectedTex != selectedIndex) {
+                    strncpy(pathBuffer, tex->path.c_str(), sizeof(pathBuffer));
+                    lastSelectedTex = selectedIndex;
+                }
+
+                if (ImGui::InputText("Path", pathBuffer, sizeof(pathBuffer))) {
+                    tex->path = pathBuffer;
+                }
+
+                if (ImGui::Button("Load Texture")) {
+                    tex->texture = object.LoadTexture(tex->path.c_str());
+                }
+
+                if (ImGui::Button("Remove Component")) {
+                    delete obj.textureComp;
+                    obj.textureComp = nullptr;
+                }
+            }
+        }
+        else {
+            ImGui::Text("No object selected");
+        }
+
+        ImGui::End();
 
         SDL_SetRenderTarget(renderer, viewportTexture);
 
@@ -214,11 +325,17 @@ int main() {
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);
 
-        // Draw background
-        object.Draw(background);
-
-        // Draw rect
-        object.Draw(rect);
+        for (auto& obj : objects) {
+            if (obj.textureComp && obj.textureComp->active && obj.textureComp->texture) {
+                // draw texture version
+                Object::Rect textured = obj;
+                textured.texture = obj.textureComp->texture;
+                object.Draw(textured);
+            } else {
+                // fallback to color
+                object.Draw(obj);
+            }
+        }
 
         SDL_SetRenderTarget(renderer, nullptr);
 
